@@ -1,4 +1,4 @@
-# Markdown PDF
+# Jablo PDF
 
 この拡張機能は Markdown ファイルを pdf、html、png、jpeg ファイルに変換します。
 

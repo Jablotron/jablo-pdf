@@ -1,9 +1,9 @@
 {
-  "name": "markdown-pdf",
-  "displayName": "Markdown PDF",
+  "name": "jablo-pdf",
+  "displayName": "Jablo PDF",
   "description": "Convert Markdown to PDF",
-  "version": "1.4.4",
-  "publisher": "yzane",
+  "version": "1.0.0",
+  "publisher": "marek.brezina",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.0.0"
@@ -22,116 +22,116 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yzane/vscode-markdown-pdf.git"
+    "url": "https://github.com/Jablotron/jablo-pdf.git"
   },
   "activationEvents": [
-    "onCommand:extension.markdown-pdf.settings",
-    "onCommand:extension.markdown-pdf.pdf",
-    "onCommand:extension.markdown-pdf.html",
-    "onCommand:extension.markdown-pdf.png",
-    "onCommand:extension.markdown-pdf.jpeg",
-    "onCommand:extension.markdown-pdf.all",
+    "onCommand:extension.jablo-pdf.settings",
+    "onCommand:extension.jablo-pdf.pdf",
+    "onCommand:extension.jablo-pdf.html",
+    "onCommand:extension.jablo-pdf.png",
+    "onCommand:extension.jablo-pdf.jpeg",
+    "onCommand:extension.jablo-pdf.all",
     "onLanguage:markdown"
   ],
   "main": "./extension",
   "contributes": {
     "commands": [
       {
-        "command": "extension.markdown-pdf.settings",
-        "title": "Markdown PDF: Export (settings.json)",
-        "group": "markdown-pdf"
+        "command": "extension.jablo-pdf.settings",
+        "title": "Jablo PDF: Export (settings.json)",
+        "group": "jablo-pdf"
       },
       {
-        "command": "extension.markdown-pdf.pdf",
-        "title": "Markdown PDF: Export (pdf)",
-        "group": "markdown-pdf"
+        "command": "extension.jablo-pdf.pdf",
+        "title": "Jablo PDF: Export (pdf)",
+        "group": "jablo-pdf"
       },
       {
-        "command": "extension.markdown-pdf.html",
-        "title": "Markdown PDF: Export (html)",
-        "group": "markdown-pdf"
+        "command": "extension.jablo-pdf.html",
+        "title": "Jablo PDF: Export (html)",
+        "group": "jablo-pdf"
       },
       {
-        "command": "extension.markdown-pdf.png",
-        "title": "Markdown PDF: Export (png)",
-        "group": "markdown-pdf"
+        "command": "extension.jablo-pdf.png",
+        "title": "Jablo PDF: Export (png)",
+        "group": "jablo-pdf"
       },
       {
-        "command": "extension.markdown-pdf.jpeg",
-        "title": "Markdown PDF: Export (jpeg)",
-        "group": "markdown-pdf"
+        "command": "extension.jablo-pdf.jpeg",
+        "title": "Jablo PDF: Export (jpeg)",
+        "group": "jablo-pdf"
       },
       {
-        "command": "extension.markdown-pdf.all",
-        "title": "Markdown PDF: Export (all: pdf, html, png, jpeg)",
-        "group": "markdown-pdf"
+        "command": "extension.jablo-pdf.all",
+        "title": "Jablo PDF: Export (all: pdf, html, png, jpeg)",
+        "group": "jablo-pdf"
       }
     ],
     "menus": {
       "commandPalette": [
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.settings"
+          "command": "extension.jablo-pdf.settings"
         },
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.pdf"
+          "command": "extension.jablo-pdf.pdf"
         },
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.html"
+          "command": "extension.jablo-pdf.html"
         },
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.png"
+          "command": "extension.jablo-pdf.png"
         },
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.jpeg"
+          "command": "extension.jablo-pdf.jpeg"
         },
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.all"
+          "command": "extension.jablo-pdf.all"
         }
       ],
       "editor/context": [
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.settings",
-          "group": "markdown-pdf@1"
+          "command": "extension.jablo-pdf.settings",
+          "group": "jablo-pdf@1"
         },
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.pdf",
-          "group": "markdown-pdf@2"
+          "command": "extension.jablo-pdf.pdf",
+          "group": "jablo-pdf@2"
         },
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.html",
-          "group": "markdown-pdf@3"
+          "command": "extension.jablo-pdf.html",
+          "group": "jablo-pdf@3"
         },
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.png",
-          "group": "markdown-pdf@4"
+          "command": "extension.jablo-pdf.png",
+          "group": "jablo-pdf@4"
         },
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.jpeg",
-          "group": "markdown-pdf@5"
+          "command": "extension.jablo-pdf.jpeg",
+          "group": "jablo-pdf@5"
         },
         {
           "when": "resourceLangId == markdown",
-          "command": "extension.markdown-pdf.all",
-          "group": "markdown-pdf@6"
+          "command": "extension.jablo-pdf.all",
+          "group": "jablo-pdf@6"
         }
       ]
     },
     "configuration": {
       "type": "object",
-      "title": "Markdown PDF",
+      "title": "Jablo PDF",
       "properties": {
-        "markdown-pdf.type": {
+        "jablo-pdf.type": {
           "type": "array",
           "default": [
             "pdf"
@@ -141,12 +141,12 @@
           },
           "description": "Output format: pdf, html, png, jpeg. Multiple output formats support"
         },
-        "markdown-pdf.convertOnSave": {
+        "jablo-pdf.convertOnSave": {
           "type": "boolean",
           "default": false,
           "description": "Enable Auto convert on save. To apply the settings, you need to restart Visual Studio Code"
         },
-        "markdown-pdf.convertOnSaveExclude": {
+        "jablo-pdf.convertOnSaveExclude": {
           "type": "array",
           "default": [],
           "items": {
@@ -154,40 +154,40 @@
           },
           "description": "Excluded file name of convertOnSave option"
         },
-        "markdown-pdf.outputDirectory": {
+        "jablo-pdf.outputDirectory": {
           "type": "string",
           "default": "",
           "description": "Output Directory."
         },
-        "markdown-pdf.outputDirectoryRelativePathFile": {
+        "jablo-pdf.outputDirectoryRelativePathFile": {
           "type": "boolean",
           "default": false,
-          "description": "If markdown-pdf.outputDirectoryRelativePathFile option is set to true, the relative path set with markdown-pdf.styles is interpreted as relative from the file"
+          "description": "If jablo-pdf.outputDirectoryRelativePathFile option is set to true, the relative path set with jablo-pdf.styles is interpreted as relative from the file"
         },
-        "markdown-pdf.styles": {
+        "jablo-pdf.styles": {
           "type": "array",
           "default": [],
           "items": {
             "type": "string"
           },
-          "description": "A list of local paths to the stylesheets to use from the markdown-pdf. All '\\' need to be written as '\\\\'."
+          "description": "A list of local paths to the stylesheets to use from the jablo-pdf. All '\\' need to be written as '\\\\'."
         },
-        "markdown-pdf.stylesRelativePathFile": {
+        "jablo-pdf.stylesRelativePathFile": {
           "type": "boolean",
           "default": false,
-          "description": "If markdown-pdf.stylesRelativePathFile option is set to true, the relative path set with markdown-pdf.styles is interpreted as relative from the file"
+          "description": "If jablo-pdf.stylesRelativePathFile option is set to true, the relative path set with jablo-pdf.styles is interpreted as relative from the file"
         },
-        "markdown-pdf.includeDefaultStyles": {
+        "jablo-pdf.includeDefaultStyles": {
           "type": "boolean",
           "default": true,
-          "description": "Enable the inclusion of default Markdown styles (VSCode, markdown-pdf)"
+          "description": "Enable the inclusion of default Markdown styles (VSCode, jablo-pdf)"
         },
-        "markdown-pdf.highlight": {
+        "jablo-pdf.highlight": {
           "type": "boolean",
           "default": true,
           "description": "Enable Syntax highlighting"
         },
-        "markdown-pdf.highlightStyle": {
+        "jablo-pdf.highlightStyle": {
           "type": [
             "string",
             "null"
@@ -289,51 +289,39 @@
           "default": "",
           "markdownDescription": "Set the style file name. [highlight.js demo](https://highlightjs.org/static/demo/) [highlight.js/src/styles](https://github.com/highlightjs/highlight.js/tree/master/src/styles)"
         },
-        "markdown-pdf.breaks": {
+        "jablo-pdf.breaks": {
           "type": "boolean",
           "default": false,
           "description": "Enable line breaks"
         },
-        "markdown-pdf.emoji": {
+        "jablo-pdf.emoji": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "Enable emoji. [Emoji cheat sheet](https://www.webfx.com/tools/emoji-cheat-sheet/)"
         },
-        "markdown-pdf.executablePath": {
+        "jablo-pdf.executablePath": {
           "type": "string",
           "default": "",
           "description": "Path to a Chromium or Chrome executable to run instead of the bundled Chromium."
         },
-        "markdown-pdf.scale": {
+        "jablo-pdf.scale": {
           "type": "number",
           "default": 1,
           "description": "Scale of the page rendering."
         },
-        "markdown-pdf.displayHeaderFooter": {
+        "jablo-pdf.displayHeaderFooter": {
           "type": "boolean",
           "default": true,
           "description": "pdf only. Display header and footer.",
           "scope": "resource"
         },
-        "markdown-pdf.headerTemplate": {
-          "type": "string",
-          "default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
-          "description": "pdf only. HTML template for the print header.",
-          "scope": "resource"
-        },
-        "markdown-pdf.footerTemplate": {
-          "type": "string",
-          "default": "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>",
-          "description": "pdf only. HTML template for the print footer.",
-          "scope": "resource"
-        },
-        "markdown-pdf.printBackground": {
+        "jablo-pdf.printBackground": {
           "type": "boolean",
           "default": true,
           "description": "pdf only. Print background graphics.",
           "scope": "resource"
         },
-        "markdown-pdf.orientation": {
+        "jablo-pdf.orientation": {
           "type": "string",
           "enum": [
             "portrait",
@@ -343,13 +331,13 @@
           "description": "pdf only. Paper orientation. portrait or landscape.",
           "scope": "resource"
         },
-        "markdown-pdf.pageRanges": {
+        "jablo-pdf.pageRanges": {
           "type": "string",
           "default": "",
           "description": "pdf only. Paper ranges to print, e.g., '1-5, 8, 11-13'.",
           "scope": "resource"
         },
-        "markdown-pdf.format": {
+        "jablo-pdf.format": {
           "type": "string",
           "enum": [
             "Letter",
@@ -368,48 +356,48 @@
           "description": "pdf only. Paper format [Letter, Legal, Tabloid, Ledger, A0, A1, A2, A3, A4, A5, A6].",
           "scope": "resource"
         },
-        "markdown-pdf.width": {
+        "jablo-pdf.width": {
           "type": "string",
           "default": "",
-          "description": "pdf only. Paper width, accepts values labeled with units(mm, cm, in, px). If it is set, it overrides the markdown-pdf.format option.",
+          "description": "pdf only. Paper width, accepts values labeled with units(mm, cm, in, px). If it is set, it overrides the jablo-pdf.format option.",
           "scope": "resource"
         },
-        "markdown-pdf.height": {
+        "jablo-pdf.height": {
           "type": "string",
           "default": "",
-          "description": "pdf only. Paper height, accepts values labeled with units(mm, cm, in, px). If it is set, it overrides the markdown-pdf.format option.",
+          "description": "pdf only. Paper height, accepts values labeled with units(mm, cm, in, px). If it is set, it overrides the jablo-pdf.format option.",
           "scope": "resource"
         },
-        "markdown-pdf.margin.top": {
+        "jablo-pdf.margin.top": {
           "type": "string",
           "default": "1.5cm",
           "description": "Page Option. Border Top. units: mm, cm, in, px",
           "scope": "resource"
         },
-        "markdown-pdf.margin.bottom": {
+        "jablo-pdf.margin.bottom": {
           "type": "string",
           "default": "1cm",
           "description": "Page Option. Border bottom. units: mm, cm, in, px",
           "scope": "resource"
         },
-        "markdown-pdf.margin.right": {
+        "jablo-pdf.margin.right": {
           "type": "string",
           "default": "1cm",
           "description": "Page Option. Border right. units: mm, cm, in, px",
           "scope": "resource"
         },
-        "markdown-pdf.margin.left": {
+        "jablo-pdf.margin.left": {
           "type": "string",
           "default": "1cm",
           "description": "Page Option. Border left. units: mm, cm, in, px",
           "scope": "resource"
         },
-        "markdown-pdf.quality": {
+        "jablo-pdf.quality": {
           "type": "number",
           "default": 100,
           "description": "jpeg only. The quality of the image, between 0-100. Not applicable to png images."
         },
-        "markdown-pdf.clip.x": {
+        "jablo-pdf.clip.x": {
           "type": [
             "number",
             "null"
@@ -417,7 +405,7 @@
           "default": "",
           "description": "png and jpeg only. x-coordinate of top-left corner of clip area."
         },
-        "markdown-pdf.clip.y": {
+        "jablo-pdf.clip.y": {
           "type": [
             "number",
             "null"
@@ -425,7 +413,7 @@
           "default": "",
           "description": "png and jpeg only. y-coordinate of top-left corner of clip area."
         },
-        "markdown-pdf.clip.width": {
+        "jablo-pdf.clip.width": {
           "type": [
             "number",
             "null"
@@ -433,7 +421,7 @@
           "default": "",
           "description": "png and jpeg only. width of clipping area."
         },
-        "markdown-pdf.clip.height": {
+        "jablo-pdf.clip.height": {
           "type": [
             "number",
             "null"
@@ -441,37 +429,37 @@
           "default": "",
           "description": "png and jpeg only. height of clipping area."
         },
-        "markdown-pdf.omitBackground": {
+        "jablo-pdf.omitBackground": {
           "type": "boolean",
           "default": false,
           "description": "png and jpeg only. Hides default white background and allows capturing screenshots with transparency."
         },
-        "markdown-pdf.plantumlOpenMarker": {
+        "jablo-pdf.plantumlOpenMarker": {
           "type": "string",
           "default": "@startuml",
           "description": "Oppening delimiter used for the plantuml parser."
         },
-        "markdown-pdf.plantumlCloseMarker": {
+        "jablo-pdf.plantumlCloseMarker": {
           "type": "string",
           "default": "@enduml",
           "description": "Closing delimiter used for the plantuml parser."
         },
-        "markdown-pdf.plantumlServer": {
+        "jablo-pdf.plantumlServer": {
           "type": "string",
           "default": "http://www.plantuml.com/plantuml",
           "description": "plantuml server"
         },
-        "markdown-pdf.StatusbarMessageTimeout": {
+        "jablo-pdf.StatusbarMessageTimeout": {
           "type": "number",
           "default": 10000,
           "description": "Statusbar message timeout [milliseconds]"
         },
-        "markdown-pdf.markdown-it-include.enable": {
+        "jablo-pdf.markdown-it-include.enable": {
           "type": "boolean",
           "default": true,
           "description": "Enable markdown-it-include. "
         },
-        "markdown-pdf.mermaidServer": {
+        "jablo-pdf.mermaidServer": {
           "type": "string",
           "default": "https://unpkg.com/mermaid/dist/mermaid.min.js",
           "description": "mermaid server."

@@ -10,18 +10,18 @@ function activate(context) {
   init();
 
   var commands = [
-    vscode.commands.registerCommand('extension.markdown-pdf.settings', async function () { await markdownPdf('settings'); }),
-    vscode.commands.registerCommand('extension.markdown-pdf.pdf', async function () { await markdownPdf('pdf'); }),
-    vscode.commands.registerCommand('extension.markdown-pdf.html', async function () { await markdownPdf('html'); }),
-    vscode.commands.registerCommand('extension.markdown-pdf.png', async function () { await markdownPdf('png'); }),
-    vscode.commands.registerCommand('extension.markdown-pdf.jpeg', async function () { await markdownPdf('jpeg'); }),
-    vscode.commands.registerCommand('extension.markdown-pdf.all', async function () { await markdownPdf('all'); })
+    vscode.commands.registerCommand('extension.jablo-pdf.settings', async function () { await markdownPdf('settings'); }),
+    vscode.commands.registerCommand('extension.jablo-pdf.pdf', async function () { await markdownPdf('pdf'); }),
+    vscode.commands.registerCommand('extension.jablo-pdf.html', async function () { await markdownPdf('html'); }),
+    vscode.commands.registerCommand('extension.jablo-pdf.png', async function () { await markdownPdf('png'); }),
+    vscode.commands.registerCommand('extension.jablo-pdf.jpeg', async function () { await markdownPdf('jpeg'); }),
+    vscode.commands.registerCommand('extension.jablo-pdf.all', async function () { await markdownPdf('all'); })
   ];
   commands.forEach(function (command) {
     context.subscriptions.push(command);
   });
 
-  var isConvertOnSave = vscode.workspace.getConfiguration('markdown-pdf')['convertOnSave'];
+  var isConvertOnSave = vscode.workspace.getConfiguration('jablo-pdf')['convertOnSave'];
   if (isConvertOnSave) {
     var disposable_onsave = vscode.workspace.onDidSaveTextDocument(function () { markdownPdfOnSave(); });
     context.subscriptions.push(disposable_onsave);
@@ -70,11 +70,11 @@ async function markdownPdf(option_type) {
     if (types_format.indexOf(option_type) >= 0) {
       types[0] = option_type;
     } else if (option_type === 'settings') {
-      var types_tmp = vscode.workspace.getConfiguration('markdown-pdf')['type'] || 'pdf';
+      var types_tmp = vscode.workspace.getConfiguration('jablo-pdf')['type'] || 'pdf';
       if (types_tmp && !Array.isArray(types_tmp)) {
           types[0] = types_tmp;
       } else {
-        types = vscode.workspace.getConfiguration('markdown-pdf')['type'] || 'pdf';
+        types = vscode.workspace.getConfiguration('jablo-pdf')['type'] || 'pdf';
       }
     } else if (option_type === 'all') {
       types = types_format;
@@ -126,7 +126,7 @@ function isMarkdownPdfOnSaveExclude() {
   try{
     var editor = vscode.window.activeTextEditor;
     var filename = path.basename(editor.document.fileName);
-    var patterns = vscode.workspace.getConfiguration('markdown-pdf')['convertOnSaveExclude'] || '';
+    var patterns = vscode.workspace.getConfiguration('jablo-pdf')['convertOnSaveExclude'] || '';
     var pattern;
     var i;
     if (patterns && Array.isArray(patterns) && patterns.length > 0) {
@@ -155,7 +155,7 @@ function convertMarkdownToHtml(filename, type, text) {
     try {
       var statusbarmessage = vscode.window.setStatusBarMessage('$(markdown) Converting (convertMarkdownToHtml) ...');
       var hljs = require('highlight.js');
-      var breaks = setBooleanValue(matterParts.data.breaks, vscode.workspace.getConfiguration('markdown-pdf')['breaks']);
+      var breaks = setBooleanValue(matterParts.data.breaks, vscode.workspace.getConfiguration('jablo-pdf')['breaks']);
       var md = require('markdown-it')({
         html: true,
         breaks: breaks,
@@ -220,7 +220,7 @@ function convertMarkdownToHtml(filename, type, text) {
   md.use(require('markdown-it-checkbox'));
 
   // emoji
-  var emoji_f = setBooleanValue(matterParts.data.emoji, vscode.workspace.getConfiguration('markdown-pdf')['emoji']);
+  var emoji_f = setBooleanValue(matterParts.data.emoji, vscode.workspace.getConfiguration('jablo-pdf')['emoji']);
   if (emoji_f) {
     var emojies_defs = require(path.join(__dirname, 'data', 'emoji.json'));
     try {
@@ -269,9 +269,9 @@ function convertMarkdownToHtml(filename, type, text) {
   // PlantUML
   // https://github.com/gmunguia/markdown-it-plantuml
   var plantumlOptions = {
-    openMarker: matterParts.data.plantumlOpenMarker || vscode.workspace.getConfiguration('markdown-pdf')['plantumlOpenMarker'] || '@startuml',
-    closeMarker: matterParts.data.plantumlCloseMarker || vscode.workspace.getConfiguration('markdown-pdf')['plantumlCloseMarker'] || '@enduml',
-    server: vscode.workspace.getConfiguration('markdown-pdf')['plantumlServer'] || ''
+    openMarker: matterParts.data.plantumlOpenMarker || vscode.workspace.getConfiguration('jablo-pdf')['plantumlOpenMarker'] || '@startuml',
+    closeMarker: matterParts.data.plantumlCloseMarker || vscode.workspace.getConfiguration('jablo-pdf')['plantumlCloseMarker'] || '@enduml',
+    server: vscode.workspace.getConfiguration('jablo-pdf')['plantumlServer'] || ''
   }
   md.use(require('markdown-it-plantuml'), plantumlOptions);
 
@@ -279,7 +279,7 @@ function convertMarkdownToHtml(filename, type, text) {
   // https://github.com/camelaissani/markdown-it-include
   // the syntax is :[alt-text](relative-path-to-file.md)
   // https://talk.commonmark.org/t/transclusion-or-including-sub-documents-for-reuse/270/13
-  if (vscode.workspace.getConfiguration('markdown-pdf')['markdown-it-include']['enable']) {
+  if (vscode.workspace.getConfiguration('jablo-pdf')['markdown-it-include']['enable']) {
     md.use(require("markdown-it-include"), {
       root: path.dirname(filename),
       includeRe: /:\[.+\]\((.+\..+)\)/i
@@ -323,15 +323,21 @@ function makeHtml(data, uri) {
     var style = '';
     style += readStyles(uri);
 
-    // get title
-    var title = path.basename(uri.fsPath);
+    // original get title
+    // var title = path.basename(uri.fsPath);
+    // get tile from processed markdown file - title tag  
+    var startTag = "<title>";
+    var substrStart = data.indexOf(startTag) + startTag.length;
+    var substrEnd = data.indexOf("</title");
+    var title = data.substring(substrStart, substrEnd);
+     
 
     // read template
     var filename = path.join(__dirname, 'template', 'template.html');
     var template = readFile(filename);
 
     // read mermaid javascripts
-    var mermaidServer = vscode.workspace.getConfiguration('markdown-pdf')['mermaidServer'] || '';
+    var mermaidServer = vscode.workspace.getConfiguration('jablo-pdf')['mermaidServer'] || '';
     var mermaid = '<script src=\"' + mermaidServer + '\"></script>';
 
     // compile template
@@ -375,7 +381,7 @@ function exportPdf(data, filename, type, uri) {
     return;
   }
 
-  var StatusbarMessageTimeout = vscode.workspace.getConfiguration('markdown-pdf')['StatusbarMessageTimeout'];
+  var StatusbarMessageTimeout = vscode.workspace.getConfiguration('jablo-pdf')['StatusbarMessageTimeout'];
   vscode.window.setStatusBarMessage('');
   var exportFilename = getOutputDir(filename, uri);
 
@@ -397,7 +403,7 @@ function exportPdf(data, filename, type, uri) {
         var tmpfilename = path.join(f.dir, f.name + '_tmp.html');
         exportHtml(data, tmpfilename);
         var options = {
-          executablePath: vscode.workspace.getConfiguration('markdown-pdf')['executablePath'] || puppeteer.executablePath(),
+          executablePath: vscode.workspace.getConfiguration('jablo-pdf')['executablePath'] || puppeteer.executablePath(),
           args: ['--lang='+vscode.env.language, '--no-sandbox', '--disable-setuid-sandbox']
           // Setting Up Chrome Linux Sandbox
           // https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md#setting-up-chrome-linux-sandbox
@@ -410,35 +416,46 @@ function exportPdf(data, filename, type, uri) {
         if (type == 'pdf') {
           // If width or height option is set, it overrides the format option.
           // In order to set the default value of page size to A4, we changed it from the specification of puppeteer.
-          var width_option = vscode.workspace.getConfiguration('markdown-pdf', uri)['width'] || '';
-          var height_option = vscode.workspace.getConfiguration('markdown-pdf', uri)['height'] || '';
+          var width_option = vscode.workspace.getConfiguration('jablo-pdf', uri)['width'] || '';
+          var height_option = vscode.workspace.getConfiguration('jablo-pdf', uri)['height'] || '';
           var format_option = '';
           if (!width_option && !height_option) {
-            format_option = vscode.workspace.getConfiguration('markdown-pdf', uri)['format'] || 'A4';
+            format_option = vscode.workspace.getConfiguration('jablo-pdf', uri)['format'] || 'A4';
           }
           var landscape_option;
-          if (vscode.workspace.getConfiguration('markdown-pdf', uri)['orientation'] == 'landscape') {
+          if (vscode.workspace.getConfiguration('jablo-pdf', uri)['orientation'] == 'landscape') {
             landscape_option = true;
           } else {
             landscape_option = false;
           }
+
+          
+          //path to json file with header and footer settings
+          var settingsPath = path.join(path.dirname(uri.fsPath), 'settings.json');
+          var mySettingsRaw = fs.readFileSync(settingsPath);
+          var mySettings = JSON.parse(mySettingsRaw);
+
           var options = {
             path: exportFilename,
-            scale: vscode.workspace.getConfiguration('markdown-pdf', uri)['scale'],
-            displayHeaderFooter: vscode.workspace.getConfiguration('markdown-pdf', uri)['displayHeaderFooter'],
-            headerTemplate: vscode.workspace.getConfiguration('markdown-pdf', uri)['headerTemplate'] || '',
-            footerTemplate: vscode.workspace.getConfiguration('markdown-pdf', uri)['footerTemplate'] || '',
-            printBackground: vscode.workspace.getConfiguration('markdown-pdf', uri)['printBackground'],
+            scale: vscode.workspace.getConfiguration('jablo-pdf', uri)['scale'],
+            displayHeaderFooter: vscode.workspace.getConfiguration('jablo-pdf', uri)['displayHeaderFooter'],
+            //header and footer tempate loaded from local json file settings
+            headerTemplate: mySettings.headerTemplate,
+            footerTemplate: mySettings.footerTemplate,
+            //original header and footer functions - to be deleted
+            //headerTemplate: vscode.workspace.getConfiguration('jablo-pdf', uri)['headerTemplate'] || '',
+            //footerTemplate: vscode.workspace.getConfiguration('jablo-pdf', uri)['footerTemplate'] || '',
+            printBackground: vscode.workspace.getConfiguration('jablo-pdf', uri)['printBackground'],
             landscape: landscape_option,
-            pageRanges: vscode.workspace.getConfiguration('markdown-pdf', uri)['pageRanges'] || '',
+            pageRanges: vscode.workspace.getConfiguration('jablo-pdf', uri)['pageRanges'] || '',
             format: format_option,
-            width: vscode.workspace.getConfiguration('markdown-pdf', uri)['width'] || '',
-            height: vscode.workspace.getConfiguration('markdown-pdf', uri)['height'] || '',
+            width: vscode.workspace.getConfiguration('jablo-pdf', uri)['width'] || '',
+            height: vscode.workspace.getConfiguration('jablo-pdf', uri)['height'] || '',
             margin: {
-              top: vscode.workspace.getConfiguration('markdown-pdf', uri)['margin']['top'] || '',
-              right: vscode.workspace.getConfiguration('markdown-pdf', uri)['margin']['right'] || '',
-              bottom: vscode.workspace.getConfiguration('markdown-pdf', uri)['margin']['bottom'] || '',
-              left: vscode.workspace.getConfiguration('markdown-pdf', uri)['margin']['left'] || ''
+              top: vscode.workspace.getConfiguration('jablo-pdf', uri)['margin']['top'] || '',
+              right: vscode.workspace.getConfiguration('jablo-pdf', uri)['margin']['right'] || '',
+              bottom: vscode.workspace.getConfiguration('jablo-pdf', uri)['margin']['bottom'] || '',
+              left: vscode.workspace.getConfiguration('jablo-pdf', uri)['margin']['left'] || ''
             }
           }
           await page.pdf(options);
@@ -453,14 +470,14 @@ function exportPdf(data, filename, type, uri) {
             quality_option = undefined;
           }
           if (type == 'jpeg') {
-            quality_option = vscode.workspace.getConfiguration('markdown-pdf')['quality'] || 100;
+            quality_option = vscode.workspace.getConfiguration('jablo-pdf')['quality'] || 100;
           }
 
           // screenshot size
-          var clip_x_option = vscode.workspace.getConfiguration('markdown-pdf')['clip']['x'] || null;
-          var clip_y_option = vscode.workspace.getConfiguration('markdown-pdf')['clip']['y'] || null;
-          var clip_width_option = vscode.workspace.getConfiguration('markdown-pdf')['clip']['width'] || null;
-          var clip_height_option = vscode.workspace.getConfiguration('markdown-pdf')['clip']['height'] || null;
+          var clip_x_option = vscode.workspace.getConfiguration('jablo-pdf')['clip']['x'] || null;
+          var clip_y_option = vscode.workspace.getConfiguration('jablo-pdf')['clip']['y'] || null;
+          var clip_width_option = vscode.workspace.getConfiguration('jablo-pdf')['clip']['width'] || null;
+          var clip_height_option = vscode.workspace.getConfiguration('jablo-pdf')['clip']['height'] || null;
           var options;
           if (clip_x_option !== null && clip_y_option !== null && clip_width_option !== null && clip_height_option !== null) {
             options = {
@@ -473,14 +490,14 @@ function exportPdf(data, filename, type, uri) {
                 width: clip_width_option,
                 height: clip_height_option,
               },
-              omitBackground: vscode.workspace.getConfiguration('markdown-pdf')['omitBackground'],
+              omitBackground: vscode.workspace.getConfiguration('jablo-pdf')['omitBackground'],
             }
           } else {
             options = {
               path: exportFilename,
               quality: quality_option,
               fullPage: true,
-              omitBackground: vscode.workspace.getConfiguration('markdown-pdf')['omitBackground'],
+              omitBackground: vscode.workspace.getConfiguration('jablo-pdf')['omitBackground'],
             }
           }
           await page.screenshot(options);
@@ -489,7 +506,7 @@ function exportPdf(data, filename, type, uri) {
         await browser.close();
 
         // delete temporary file
-        var debug = vscode.workspace.getConfiguration('markdown-pdf')['debug'] || false;
+        var debug = vscode.workspace.getConfiguration('jablo-pdf')['debug'] || false;
         if (!debug) {
           if (isExistsPath(tmpfilename)) {
             deleteFile(tmpfilename);
@@ -545,7 +562,7 @@ function getOutputDir(filename, resource) {
     if (resource === undefined) {
       return filename;
     }
-    var outputDirectory = vscode.workspace.getConfiguration('markdown-pdf')['outputDirectory'] || '';
+    var outputDirectory = vscode.workspace.getConfiguration('jablo-pdf')['outputDirectory'] || '';
     if (outputDirectory.length === 0) {
       return filename;
     }
@@ -560,15 +577,15 @@ function getOutputDir(filename, resource) {
     // Use path if it is absolute
     if (path.isAbsolute(outputDirectory)) {
       if (!isExistsDir(outputDirectory)) {
-        showErrorMessage(`The output directory specified by the markdown-pdf.outputDirectory option does not exist.\
-          Check the markdown-pdf.outputDirectory option. ` + outputDirectory);
+        showErrorMessage(`The output directory specified by the jablo-pdf.outputDirectory option does not exist.\
+          Check the jablo-pdf.outputDirectory option. ` + outputDirectory);
         return;
       }
       return path.join(outputDirectory, path.basename(filename));
     }
 
-    // Use a workspace relative path if there is a workspace and markdown-pdf.outputDirectoryRootPath = workspace
-    var outputDirectoryRelativePathFile = vscode.workspace.getConfiguration('markdown-pdf')['outputDirectoryRelativePathFile'];
+    // Use a workspace relative path if there is a workspace and jablo-pdf.outputDirectoryRootPath = workspace
+    var outputDirectoryRelativePathFile = vscode.workspace.getConfiguration('jablo-pdf')['outputDirectoryRelativePathFile'];
     let root = vscode.workspace.getWorkspaceFolder(resource);
     if (outputDirectoryRelativePathFile === false && root) {
       outputDir = path.join(root.uri.fsPath, outputDirectory);
@@ -665,7 +682,7 @@ function readStyles(uri) {
     var filename = '';
     var i;
 
-    includeDefaultStyles = vscode.workspace.getConfiguration('markdown-pdf')['includeDefaultStyles'];
+    includeDefaultStyles = vscode.workspace.getConfiguration('jablo-pdf')['includeDefaultStyles'];
 
     // 1. read the style of the vscode.
     if (includeDefaultStyles) {
@@ -685,11 +702,11 @@ function readStyles(uri) {
     }
 
     // 3. read the style of the highlight.js.
-    var highlightStyle = vscode.workspace.getConfiguration('markdown-pdf')['highlightStyle'] || '';
-    var ishighlight = vscode.workspace.getConfiguration('markdown-pdf')['highlight'];
+    var highlightStyle = vscode.workspace.getConfiguration('jablo-pdf')['highlightStyle'] || '';
+    var ishighlight = vscode.workspace.getConfiguration('jablo-pdf')['highlight'];
     if (ishighlight) {
       if (highlightStyle) {
-        var css = vscode.workspace.getConfiguration('markdown-pdf')['highlightStyle'] || 'github.css';
+        var css = vscode.workspace.getConfiguration('jablo-pdf')['highlightStyle'] || 'github.css';
         filename = path.join(__dirname, 'node_modules', 'highlight.js', 'styles', css);
         style += makeCss(filename);
       } else {
@@ -698,14 +715,14 @@ function readStyles(uri) {
       }
     }
 
-    // 4. read the style of the markdown-pdf.
+    // 4. read the style of the jablo-pdf.
     if (includeDefaultStyles) {
-      filename = path.join(__dirname, 'styles', 'markdown-pdf.css');
+      filename = path.join(__dirname, 'styles', 'styles.css');
       style += makeCss(filename);
     }
 
-    // 5. read the style of the markdown-pdf.styles settings.
-    styles = vscode.workspace.getConfiguration('markdown-pdf')['styles'] || '';
+    // 5. read the style of the jablo-pdf.styles settings.
+    styles = vscode.workspace.getConfiguration('jablo-pdf')['styles'] || '';
     if (styles && Array.isArray(styles) && styles.length > 0) {
       for (i = 0; i < styles.length; i++) {
         var href = fixHref(uri, styles[i]);
@@ -748,8 +765,8 @@ function fixHref(resource, href) {
       return vscode.Uri.file(href).toString();
     }
 
-    // Use a workspace relative path if there is a workspace and markdown-pdf.stylesRelativePathFile is false
-    var stylesRelativePathFile = vscode.workspace.getConfiguration('markdown-pdf')['stylesRelativePathFile'];
+    // Use a workspace relative path if there is a workspace and jablo-pdf.stylesRelativePathFile is false
+    var stylesRelativePathFile = vscode.workspace.getConfiguration('jablo-pdf')['stylesRelativePathFile'];
     let root = vscode.workspace.getWorkspaceFolder(resource);
     if (stylesRelativePathFile === false && root) {
       return vscode.Uri.file(path.join(root.uri.fsPath, href)).toString();
@@ -765,7 +782,7 @@ function fixHref(resource, href) {
 function checkPuppeteerBinary() {
   try {
     // settings.json
-    var executablePath = vscode.workspace.getConfiguration('markdown-pdf')['executablePath'] || ''
+    var executablePath = vscode.workspace.getConfiguration('jablo-pdf')['executablePath'] || ''
     if (isExistsPath(executablePath)) {
       INSTALL_CHECK = true;
       return true;
@@ -790,13 +807,13 @@ function checkPuppeteerBinary() {
  */
 function installChromium() {
   try {
-    vscode.window.showInformationMessage('[Markdown PDF] Installing Chromium ...');
+    vscode.window.showInformationMessage('[Jablo PDF] Installing Chromium ...');
     var statusbarmessage = vscode.window.setStatusBarMessage('$(markdown) Installing Chromium ...');
 
     // proxy setting
     setProxy();
 
-    var StatusbarMessageTimeout = vscode.workspace.getConfiguration('markdown-pdf')['StatusbarMessageTimeout'];
+    var StatusbarMessageTimeout = vscode.workspace.getConfiguration('jablo-pdf')['StatusbarMessageTimeout'];
     const puppeteer = require('puppeteer-core');
     const browserFetcher = puppeteer.createBrowserFetcher();
     const revision = require(path.join(__dirname, 'node_modules', 'puppeteer-core', 'package.json')).puppeteer.chromium_revision;
@@ -818,7 +835,7 @@ function installChromium() {
         INSTALL_CHECK = true;
         statusbarmessage.dispose();
         vscode.window.setStatusBarMessage('$(markdown) Chromium installation succeeded!', StatusbarMessageTimeout);
-        vscode.window.showInformationMessage('[Markdown PDF] Chromium installation succeeded.');
+        vscode.window.showInformationMessage('[Jablo PDF] Chromium installation succeeded.');
         return Promise.all(cleanupOldVersions);
       }
     }
