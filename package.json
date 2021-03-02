@@ -2,8 +2,8 @@
   "name": "jablo-pdf",
   "displayName": "Jablo PDF",
   "description": "Convert Markdown to PDF",
-  "version": "1.0.0",
-  "publisher": "marek.brezina",
+  "version": "1.0.1",
+  "publisher": "MarekBrezina",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.0.0"
